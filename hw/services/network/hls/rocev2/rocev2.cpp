@@ -725,10 +725,10 @@ void rocev2(
 	extract_icrc(s_axis_rx_data, rx_crc2ipFifo);
 #else
 	extract_icrc(s_axis_rx_data, rx_dataFifo, rx_crcFifo);
-	mask_header_fields<1>(rx_dataFifo, rx_crcDataFifo, rx_maskedDataFifo);
-	round_robin_arbiter<1>(rx_maskedDataFifo, rx_maskedDataFifo1, rx_maskedDataFifo2);
-	compute_crc32<1>(rx_maskedDataFifo1, rx_calcCrcFifo1);
-	compute_crc32<2>(rx_maskedDataFifo2, rx_calcCrcFifo2);
+	mask_header_fields<WIDTH,1>(rx_dataFifo, rx_crcDataFifo, rx_maskedDataFifo);
+	round_robin_arbiter<WIDTH,1>(rx_maskedDataFifo, rx_maskedDataFifo1, rx_maskedDataFifo2);
+	compute_crc32<WIDTH,1>(rx_maskedDataFifo1, rx_calcCrcFifo1);
+	compute_crc32<WIDTH,2>(rx_maskedDataFifo2, rx_calcCrcFifo2);
 	round_robin_merger<1>(rx_calcCrcFifo1, rx_calcCrcFifo2, rx_calcCrcFifo);
 	drop_invalid_crc(rx_crcDataFifo, rx_crcFifo, rx_calcCrcFifo, rx_crc2ipFifo, regCrcDropPkgCount);
 #endif
@@ -756,10 +756,10 @@ void rocev2(
 #ifdef DISABLE_CRC_CHECK
 	insert_icrc(tx_ip2crcFifo, m_axis_tx_data);
 #else
-	mask_header_fields<2>(tx_ip2crcFifo, tx_crcDataFifo, tx_maskedDataFifo);
-	round_robin_arbiter<2>(tx_maskedDataFifo, tx_maskedDataFifo1, tx_maskedDataFifo2);
-	compute_crc32<3>(tx_maskedDataFifo1, crcFifo1);
-	compute_crc32<4>(tx_maskedDataFifo2, crcFifo2);
+	mask_header_fields<WIDTH,2>(tx_ip2crcFifo, tx_crcDataFifo, tx_maskedDataFifo);
+	round_robin_arbiter<WIDTH,2>(tx_maskedDataFifo, tx_maskedDataFifo1, tx_maskedDataFifo2);
+	compute_crc32<WIDTH,3>(tx_maskedDataFifo1, crcFifo1);
+	compute_crc32<WIDTH,4>(tx_maskedDataFifo2, crcFifo2);
 	round_robin_merger<2>(crcFifo1, crcFifo2, crcFifo);
 	insert_icrc(crcFifo, tx_crcDataFifo, m_axis_tx_data);
 #endif
