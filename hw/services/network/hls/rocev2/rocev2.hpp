@@ -35,7 +35,7 @@
 #include "../ib_transport_protocol/ib_transport_protocol.hpp"
 //#include "../pointer_chasing/pointer_chasing.hpp"
 
-#define DISABLE_CRC_CHECK
+// #define DISABLE_CRC_CHECK
 
 #if IP_VERSION == 6
 typedef ipv6Meta ipMeta;
